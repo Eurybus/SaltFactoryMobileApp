@@ -15,6 +15,8 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Objects;
+
 import io.proximi.proximiiolibrary.ProximiioAPI;
 import io.proximi.proximiiolibrary.ProximiioGeofence;
 import io.proximi.proximiiolibrary.ProximiioListener;
@@ -38,7 +40,7 @@ public class ReceiverComponent extends BroadcastReceiver {
             @Override
             public void geofenceEnter(ProximiioGeofence geofence) {
                 Log.d(TAG, "Geofence enter: " + geofence.getName());
-                if(geofence.getName() == "lobby" && !isAuthenticated){
+                if(Objects.equals(geofence.getName(), "Lobby") && !isAuthenticated){
                     askForAuth();
                 }
             }
@@ -118,12 +120,14 @@ public class ReceiverComponent extends BroadcastReceiver {
     }
 
     public void stopProxim() {
-        proximiioAPI.destroy();
+        proximiioAPI.destroyService(true);
         proximiioAPI.setListener(null);
         Log.d(TAG, "Stopped");
     }
 
     private void askForAuth(){
+        Log.d(TAG, "Begin authenticating user");
+        isAuthenticated = true;
         Intent intent = new Intent(appContext, LoginActivity.class);
         appContext.startActivity(intent);
     }

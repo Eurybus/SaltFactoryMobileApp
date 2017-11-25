@@ -2,6 +2,7 @@ package com.saltfactory.androidclient;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import static android.R.attr.targetSdkVersion;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String IS_AUTH_SETTING = "is_authenticated";
     private boolean proximInit = false;
     private ProximiioAPI proximiioAPI;
     public ReceiverComponent rx;
@@ -45,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        SharedPreferences settings = getSharedPreferences(IS_AUTH_SETTING, 0);
+        settings.getBoolean(IS_AUTH_SETTING, false);
+        rx = new ReceiverComponent();
     }
 
     @Override
@@ -120,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
     }
     public void startButtonClicked(View view){
         if(!proximInit && hasPermsissions()){
-            rx = new ReceiverComponent();
             rx.startProxim(this);
             proximInit = true;
         }
