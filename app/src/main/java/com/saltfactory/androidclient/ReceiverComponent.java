@@ -10,6 +10,7 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.EditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,8 +26,11 @@ import io.proximi.proximiiolibrary.ProximiioListener;
 public class ReceiverComponent extends BroadcastReceiver {
     private static final String TAG="BackgroundReceiver";
     private ProximiioAPI proximiioAPI;
+    private Context appContext;
+    public boolean isAuthenticated = false;
 
     public void startProxim(Context context){
+        appContext = context;
         Log.d(TAG, "Manually started Proximi.io listener");
         proximiioAPI = new ProximiioAPI(TAG, context);
         proximiioAPI.setLogin("h4211@student.jamk.fi", "omena11");
@@ -34,6 +38,9 @@ public class ReceiverComponent extends BroadcastReceiver {
             @Override
             public void geofenceEnter(ProximiioGeofence geofence) {
                 Log.d(TAG, "Geofence enter: " + geofence.getName());
+                if(geofence.getName() == "lobby" && !isAuthenticated){
+                    askForAuth();
+                }
             }
 
             @Override
@@ -117,7 +124,9 @@ public class ReceiverComponent extends BroadcastReceiver {
     }
 
     private void askForAuth(){
-
+        Intent intent = new Intent(appContext, LoginActivity.class);
+        appContext.startActivity(intent);
     }
+
 }
 

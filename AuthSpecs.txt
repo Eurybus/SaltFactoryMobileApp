@@ -1,0 +1,6 @@
+endpoint: auth.saltfactory.io/api/salt-auth
+Request:
+    POST
+    data: {'status': 1}
+Response:
+    HTTP 200 | HTTP 403

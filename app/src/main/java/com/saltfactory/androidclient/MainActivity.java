@@ -1,6 +1,7 @@
 package com.saltfactory.androidclient;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -130,4 +131,8 @@ public class MainActivity extends AppCompatActivity {
         rx.stopProxim();
     }
 
+    public void loginButtonClicked(View view){
+        Intent intent = new Intent(this, LoginActivity.class);
+        this.startActivity(intent);
+    }
 }
