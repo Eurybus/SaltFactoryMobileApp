@@ -18,6 +18,10 @@ android {
     }
 }
 repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
     maven {
         url "http://proximi-io.bintray.com/proximiio-android"
     }
@@ -38,4 +42,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'io.proximi.proximiiolibrary:proximiiolibrary:2.6.4'
+    compile 'com.loopj.android:android-async-http:1.4.9'
 }

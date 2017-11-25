@@ -3,6 +3,7 @@ package com.saltfactory.androidclient;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -57,6 +58,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private String username;
+    private RestClient rClient;
+    boolean isAuthenticated = false;
+
+    public boolean isAuthenticated() {
+        return isAuthenticated;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -224,10 +231,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String username;
         private final String mPassword;
+        private Context context;
 
         UserLoginTask(String username, String password) {
             this.username = username;
             mPassword = password;
+            this.context = context;
         }
 
         @Override
@@ -241,16 +250,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(username)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+//            for (String credential : DUMMY_CREDENTIALS) {
+//                String[] pieces = credential.split(":");
+//                if (pieces[0].equals(username)) {
+//                    // Account exists, return true if the password matches.
+//                    return pieces[1].equals(mPassword);
+//                }
+//            }
 
             // TODO: register the new account here.
-            return true;
+            rClient = new RestClient(context);
+            return rClient.authUser();
         }
 
         @Override
@@ -259,6 +269,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                isAuthenticated = true;
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
