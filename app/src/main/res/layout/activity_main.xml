@@ -23,12 +23,20 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/ProxmStartButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="startButtonClicked"
-                android:text="Button" />
+                android:text="Start" />
+
+            <Button
+                android:id="@+id/ProxmStop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="stopButtonClicked"
+                android:text="Stop" />
 
         </LinearLayout>
 

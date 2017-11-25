@@ -27,6 +27,8 @@
         <receiver android:name=".ReceiverComponent"  android:exported="false">
             <intent-filter>
                 <action android:name="io.proximi.proximiiolibrary.action.POSITION"/>
+                <action android:name="io.proximi.proximiiolibrary.action.OUTPUT"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
         <activity android:name=".MainActivity">

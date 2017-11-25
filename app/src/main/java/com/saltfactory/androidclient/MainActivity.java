@@ -21,8 +21,10 @@ import io.proximi.proximiiolibrary.ProximiioListener;
 import static android.R.attr.targetSdkVersion;
 
 public class MainActivity extends AppCompatActivity {
+
     private boolean proximInit = false;
     private ProximiioAPI proximiioAPI;
+    public ReceiverComponent rx;
     private static final String TAG = "ProximiioDemo";
     public static final String AUTH = "AUTH_KEY_HERE";
     private final int REQUEST_LOCATION = 1;
@@ -45,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        checkPermissions();
+    }
     private void checkPermissions() {
         // Verify that all required contact permissions have been granted.
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -64,10 +71,6 @@ public class MainActivity extends AppCompatActivity {
             requestBluetoothPermissions();
         }
     }
-//    @Override
-//    protected void onStart(){
-//        int hasLocationPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_LOCATION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // accepted, start getting location information
-                    proximiioAPI.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//                    proximiioAPI.onRequestPermissionsResult(requestCode, permissions, grantResults);
                     Toast.makeText(this, "Location access granted", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Location access granted");
                 } else {
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case REQUEST_BLUETOOTH:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    proximiioAPI.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//                    proximiioAPI.onRequestPermissionsResult(requestCode, permissions, grantResults);
                     Toast.makeText(this, "Bluetooth access granted", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "Bluetooth access granted");
                 }
@@ -103,33 +106,28 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, PERMISSIONS_BLUETOOTH, REQUEST_BLUETOOTH);
     }
 
-
+    private boolean hasPermsissions(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     public void startButtonClicked(View view){
-        if(!proximInit){
-            // Create our Proximi.io listener
-            proximiioAPI = new ProximiioAPI(TAG, this);
-            proximiioAPI.setListener(new ProximiioListener() {
-                @Override
-                public void geofenceEnter(ProximiioGeofence geofence) {
-                    Log.d(TAG, "Geofence enter: " + geofence.getName());
-                }
-
-                @Override
-                public void geofenceExit(ProximiioGeofence geofence, @Nullable Long dwellTime) {
-                    Log.d(TAG, "Geofence exit: " + geofence.getName() + ", dwell time: " + String.valueOf(dwellTime));
-                }
-
-                @Override
-                public void loginFailed(LoginError loginError) {
-                    Log.e(TAG, "LoginError! (" + loginError.toString() + ")");
-                }
-            });
-            proximiioAPI.setLogin("h4211@student.jamk.fi", "omena11");
-            proximiioAPI.setActivity(this);
+        if(!proximInit && hasPermsissions()){
+            rx = new ReceiverComponent();
+            rx.startProxim(this);
             proximInit = true;
         }
 
-        checkPermissions();
+    }
+
+    public void stopButtonClicked(View view){
+        rx.stopProxim();
     }
 
 }
