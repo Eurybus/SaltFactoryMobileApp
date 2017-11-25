@@ -2,10 +2,10 @@ package com.saltfactory.androidclient;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
+import com.loopj.android.http.SyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import cz.msebera.android.httpclient.Header;
@@ -16,9 +16,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class RestClient {
     private Context context;
-    private AsyncHttpClient client;
+    private SyncHttpClient client;
     private RequestParams params;
-    private String url = "http://salt.eu-gb.mybluemix.net/api/authorization";
+    private String url = "https://salt.eu-gb.mybluemix.net/api/user/login/1";
     final static String TAG = "RestClient";
     private boolean auth = false;
 
@@ -26,27 +26,34 @@ public class RestClient {
     public RestClient(Context context) {
         this.context = context;
 
-        AsyncHttpClient client = new AsyncHttpClient();
+        this.client = new SyncHttpClient();
         RequestParams params = new RequestParams();
-        params.put("status", "1");
     }
 
     public boolean authUser(){
-        client.post(url, params, new TextHttpResponseHandler() {
+        try {
+            this.client.get(url, getResponseHandler());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return auth;
+    }
+
+    public ResponseHandlerInterface getResponseHandler() {
+        return new TextHttpResponseHandler() {
+
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(context, "HTTP FAIL: " + statusCode + " " + responseString, Toast.LENGTH_LONG).show();
                 Log.d(TAG, "HTTP " + statusCode + " " + responseString);
                 auth = false;
             }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                Toast.makeText(context, "HTTP WIN: " + statusCode + " " + responseString, Toast.LENGTH_LONG).show();
                 Log.d(TAG, "HTTP " + statusCode + " " + responseString);
                 auth = true;
             }
-        });
-        return auth;
+
+        };
     }
 }

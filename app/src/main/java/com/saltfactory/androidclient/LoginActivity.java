@@ -132,7 +132,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(username, password);
+            mAuthTask = new UserLoginTask(username, password, this);
             mAuthTask.execute((Void) null);
         }
     }
@@ -233,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mPassword;
         private Context context;
 
-        UserLoginTask(String username, String password) {
+        UserLoginTask(String username, String password, Context context) {
             this.username = username;
             mPassword = password;
             this.context = context;
