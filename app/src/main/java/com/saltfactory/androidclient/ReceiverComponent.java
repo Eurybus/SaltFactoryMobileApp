@@ -14,11 +14,11 @@ import io.proximi.proximiiolibrary.ProximiioAPI;
 public class ReceiverComponent extends BroadcastReceiver {
     private static final String TAG="BackgroundReceiver";
 
-    public void startProxim(Context context){
-        Log.d(TAG, "Manually started Proximi.io listener");
-        ProximiioAPI proximiioAPI = new ProximiioAPI("BackgroundReceiver", context);
-        proximiioAPI.setLogin("h4211@student.jamk.fi", "Omena11");
-    }
+//    public void startProxim(Context context){
+//        Log.d(TAG, "Manually started Proximi.io listener");
+//        ProximiioAPI proximiioAPI = new ProximiioAPI("BackgroundReceiver", context);
+//        proximiioAPI.setLogin("h4211@student.jamk.fi", "Omena11");
+//    }
     @Override
     public void onReceive(Context context, Intent intent) {
         switch (intent.getAction()) {
