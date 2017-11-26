@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ProximiioAPI proximiioAPI;
     public ReceiverComponent rx;
     private static final String TAG = "ProximiioDemo";
-    public static final String AUTH = "AUTH_KEY_HERE";
+    public static final String AUTH = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImlzcyI6IjQyNGQ3NjQ3LWI3M2ItNDY4Zi04OWZlLWU0Mjk4MWJmNzFiYiIsInR5cGUiOiJhcHBsaWNhdGlvbiIsImFwcGxpY2F0aW9uX2lkIjoiOGMyMDRiZTUtNWQwZi00NWYxLWEzMjAtMDdhODlhZDJmNGFjIn0.qoPtGcIdbpqU-uhz0HzlogJYS5TT6JnYnDI_HumE-ME";
     private final int REQUEST_LOCATION = 1;
     private final int REQUEST_BLUETOOTH = 2;
     private final int REQUEST_BLUETOOTH_ADMIN = 3;

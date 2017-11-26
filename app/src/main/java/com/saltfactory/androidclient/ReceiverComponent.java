@@ -36,6 +36,7 @@ public class ReceiverComponent extends BroadcastReceiver {
         Log.d(TAG, "Manually started Proximi.io listener");
         proximiioAPI = new ProximiioAPI(TAG, context);
         proximiioAPI.setLogin("h4211@student.jamk.fi", "omena11");
+        proximiioAPI.setAuth(MainActivity.AUTH);
         proximiioAPI.setListener(new ProximiioListener() {
             @Override
             public void geofenceEnter(ProximiioGeofence geofence) {
