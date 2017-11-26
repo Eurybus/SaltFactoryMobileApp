@@ -35,13 +35,16 @@ public class ReceiverComponent extends BroadcastReceiver {
         appContext = context;
         Log.d(TAG, "Manually started Proximi.io listener");
         proximiioAPI = new ProximiioAPI(TAG, context);
-        proximiioAPI.setLogin("h4211@student.jamk.fi", "omena11");
+        proximiioAPI.setLogin("h42112@student.jamk.fi", "pass1234");
         proximiioAPI.setAuth(MainActivity.AUTH);
         proximiioAPI.setListener(new ProximiioListener() {
             @Override
             public void geofenceEnter(ProximiioGeofence geofence) {
                 Log.d(TAG, "Geofence enter: " + geofence.getName());
                 if(Objects.equals(geofence.getName(), "Lobby") && !isAuthenticated){
+                    askForAuth();
+                }
+                if(Objects.equals(geofence.getName(), "Please authenticate")){
                     askForAuth();
                 }
             }
@@ -95,7 +98,10 @@ public class ReceiverComponent extends BroadcastReceiver {
                     }
 
                     if (title != null) {
-                        Intent intent2 = new Intent(context, MainActivity.class);
+                        Intent intent2 = new Intent(context, FullscreenActivity.class);
+                        if (Objects.equals(title, "Please authenticate")) {
+                            intent2 = new Intent(context, LoginActivity.class);
+                        }
                         intent2.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
                         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent2, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -104,7 +110,8 @@ public class ReceiverComponent extends BroadcastReceiver {
                         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                                 .setContentIntent(contentIntent)
                                 .setSmallIcon(R.drawable.notification)
-                                .setContentTitle(title);
+                                .setContentTitle(context.getString(R.string.app_name))
+                                .setContentText(title);
 
                         notificationBuilder.setPriority(Notification.PRIORITY_HIGH);
 
